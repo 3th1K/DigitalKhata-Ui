@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config>
+        <trust-anchors>
+            <certificates src="@raw/my_ca"/>
+        </trust-anchors>
+    </base-config>
+    <pin-set>
+        <pin digest="SHA-256">8736ef6cfb2b99d2592b56bfcb88c28ae83fc84aa994a513f0e8ee5c42c1ed5e</pin>
+    </pin-set>
+</network-security-config>
