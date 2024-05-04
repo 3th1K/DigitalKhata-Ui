@@ -1,4 +1,4 @@
-package com.example.login_page
+package com.example.DigitalKhata
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "login_page"
+rootProject.name = "DigitalKhata"
 include(":app")
  

@@ -1,4 +1,4 @@
-package com.example.login_page
+package com.example.DigitalKhata
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
