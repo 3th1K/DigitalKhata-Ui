@@ -1,4 +1,4 @@
-package com.example.DigitalKhata
+package com.example.digitalkhata
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

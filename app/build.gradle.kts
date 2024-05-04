@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.DigitalKhata"
+    namespace = "com.example.digitalkhata"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.DigitalKhata"
+        applicationId = "com.example.digitalkhata"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
