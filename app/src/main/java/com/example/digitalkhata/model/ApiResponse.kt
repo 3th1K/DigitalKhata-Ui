@@ -1,8 +1,9 @@
 package com.example.digitalkhata.model
 
-data class ApiResponse(
+data class ApiResponse<T>(
     var success: Boolean = false,
     var message: String = "No message",
-    var data: Any? = null,
-    var errorCode: Int? = null
+    var data: T? = null,
+    var error: ErrorInfo? = null
 )
+

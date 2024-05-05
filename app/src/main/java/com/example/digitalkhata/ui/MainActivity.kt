@@ -1,5 +1,6 @@
 package com.example.digitalkhata.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -14,9 +15,12 @@ import com.example.digitalkhata.api.RetrofitClient
 import com.example.digitalkhata.model.UserLoginRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import com.auth0.jwt.JWT
+import com.auth0.jwt.interfaces.DecodedJWT
+import com.example.digitalkhata.api.ApiService
+import com.example.digitalkhata.model.UserResponse
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +28,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var passwordEditText: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupUI()
+        setupClickListeners()
+    }
+
+    private fun setupUI() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -31,60 +40,98 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         // Initialize EditText fields
         usernameEditText = findViewById(R.id.username_input)
         passwordEditText = findViewById(R.id.password_input)
+    }
 
-        // Handle click event for the login button
+    private fun setupClickListeners() {
         val loginButton = findViewById<Button>(R.id.login_btn)
-        loginButton.setOnClickListener {
-            val username = usernameEditText.text.toString()
-            val password = passwordEditText.text.toString()
+        loginButton.setOnClickListener { handleLogin() }
 
-            // Check if username and password are not empty
-            if (username.isNotEmpty() && password.isNotEmpty()) {
-                // Create request body
-                val loginRequest = UserLoginRequest(username, password);
-
-                // Make login API call
-                val apiService = RetrofitClient.apiService
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        val response = apiService.login(loginRequest)
-                        if (response.isSuccessful) {
-                            val token = response.body()?.data as String
-                            // Handle successful login, e.g., save token and navigate to next screen
-                            //navigateToNextScreen(token)
-                            showToast("Login Success")
-                        } else {
-                            // Handle unsuccessful login (e.g., display error message)
-                            showToast("Invalid username or password")
-                        }
-                    } catch (e: HttpException) {
-                        // Handle HTTP errors (e.g., 401 Unauthorized)
-                        showToast("Login failed: ${e.message}")
-                    } catch (e: Exception) {
-                        // Handle other exceptions (e.g., network errors)
-                        showToast("Login failed: ${e.message}")
-                    }
-                }
-            } else {
-                showToast("Please enter username and password")
-            }
-        }
-
-        // Handle click event for the register button
         val registerButton = findViewById<Button>(R.id.register_btn)
-        registerButton.setOnClickListener {
-            val intent = Intent(this, RegistrationActivity::class.java)
-            startActivity(intent)
+        registerButton.setOnClickListener { navigateToRegistration() }
+    }
+
+    private fun handleLogin() {
+        val username = usernameEditText.text.toString()
+        val password = passwordEditText.text.toString()
+        if (username.isNotEmpty() && password.isNotEmpty()) {
+            val loginRequest = UserLoginRequest(username, password)
+            login(loginRequest)
+        } else {
+            showToast("Please enter username and password")
         }
     }
-    private fun showToast(message: String) {
+
+    private fun navigateToRegistration() {
+        val intent = Intent(this@MainActivity, RegistrationActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun login(loginRequest: UserLoginRequest) {
+        val apiService = RetrofitClient.apiService
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiService.login(loginRequest)
+                if (response.isSuccessful) {
+                    val token = response.body()?.data as String
+                    val userId = extractUserIdFromToken(token)
+                    fetchUserDetails(apiService, token, userId)
+                    showToast("Login Success, UserId : $userId")
+                } else {
+                    showToast("Invalid username or password")
+                }
+            } catch (e: HttpException) {
+                handleLoginError(e)
+            } catch (e: Exception) {
+                handleLoginError(e)
+            }
+        }
+    }
+
+    private fun fetchUserDetails(apiService: ApiService, token: String, userId: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val userDetailsResponse = apiService.getUserDetails("Bearer $token", userId)
+                if (userDetailsResponse.isSuccessful) {
+                    val userDetails = userDetailsResponse.body()?.data
+                    handleUserDetails(userDetails)
+                } else {
+                    showToast("Failed to fetch user details")
+                }
+            } catch (e: Exception) {
+                showToast("Error fetching user details: ${e.message}")
+            }
+        }
+    }
+
+    private fun handleUserDetails(userDetails: UserResponse?) {
+        showToast(
+            "Fetched user details " +
+                    "\nusername : ${userDetails?.username}" +
+                    "\nemail : ${userDetails?.email}" +
+                    "\nfull name : ${userDetails?.fullname}"
+        )
+    }
+
+    private fun handleLoginError(e: Exception) {
+        showToast("Login failed: ${e.message}")
+    }
+
+    private fun Context.showToast(message: String) {
         runOnUiThread {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
     }
+
+
+
+
+    private fun extractUserIdFromToken(token: String): Int {
+        val jwt: DecodedJWT = JWT.decode(token)
+        return jwt.getClaim("userId").asString().toInt()
+    }
+
 
 }
