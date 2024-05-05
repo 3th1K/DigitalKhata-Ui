@@ -27,6 +27,7 @@
         </activity>
         <!-- Registration Activity -->
         <activity android:name=".ui.RegistrationActivity" />
+        <activity android:name=".ui.DashboardActivity" />
 
     </application>
 
