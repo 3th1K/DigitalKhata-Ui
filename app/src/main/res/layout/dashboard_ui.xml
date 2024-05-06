@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/dashboard_ui"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
@@ -10,18 +10,112 @@
     android:padding="16dp"
     tools:context=".ui.RegistrationActivity">
 
-    <LinearLayout
+    <!-- Main Content -->
+    <RelativeLayout
+        android:id="@+id/dashboard_ui"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent">
+
+        <!-- Profile Image -->
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/icon_account_circle_"
+            android:contentDescription="@string/todo" />
+
+    </RelativeLayout>
+
+    <!-- Navigation Drawer -->
+    <LinearLayout
+        android:id="@+id/navigation_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@drawable/drawer_background"
+        android:elevation="5dp"
         android:gravity="center"
         android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="625dp"
-        android:layout_marginStart="155dp"
-        android:src="@drawable/icon_account_circle_"/>
+        <!-- Profile Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Profile Image -->
+            <ImageView
+                android:id="@+id/my_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_account_circle_"
+                android:contentDescription="@string/todo" />
+
+            <!-- Username and Full Name -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_username"
+                    style="@style/DrawerItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_username"
+                    android:drawablePadding="8dp"
+                    android:padding="8dp"
+                    tools:ignore="UseCompatTextViewDrawableXml" />
+
+                <TextView
+                    android:id="@+id/text_fullname"
+                    style="@style/DrawerItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_username"
+                    android:drawablePadding="8dp"
+                    android:padding="8dp"
+                    tools:ignore="UseCompatTextViewDrawableXml" />
+
+                <TextView
+                    android:id="@+id/text_email"
+                    style="@style/DrawerItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_username"
+                    android:drawablePadding="8dp"
+                    android:padding="8dp"
+                    tools:ignore="UseCompatTextViewDrawableXml" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <!-- Logout Button -->
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_logout"
+            android:gravity="center"
+            android:text="@string/logout"
+            android:textColor="@color/black" />
 
     </LinearLayout>
-</RelativeLayout>
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loading_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000"
+    android:visibility="gone"
+    android:gravity="center">
+
+    <!-- Spinning circle animation -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:indeterminate="true"
+        android:layout_centerInParent="true"
+        android:theme="@style/LoadingProgressBar" />
+
+    <!-- Loading message -->
+    <TextView
+        android:id="@+id/loading_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:layout_below="@id/progress_bar"
+        android:layout_marginTop="16dp"
+        android:visibility="visible"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

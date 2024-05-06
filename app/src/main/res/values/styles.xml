@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Drawer item style -->
+    <style name="DrawerItem">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item> <!-- Adjust text color as needed -->
+        <item name="android:paddingVertical">8dp</item>
+    </style>
+
+    <!-- progress bas style -->
+    <style name="LoadingProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/ic_circle</item>
+    </style>
+</resources>

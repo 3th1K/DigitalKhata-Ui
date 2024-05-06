@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/signup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
@@ -20,7 +20,7 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:src="@drawable/icon_account_circle_"
-            />
+            android:contentDescription="TODO" />
 
         <EditText
             android:layout_width="match_parent"

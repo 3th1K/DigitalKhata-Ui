@@ -1,4 +1,8 @@
 <resources>
+    <string name="todo">todo</string>
     <string name="app_name">DigitalKhata</string>
     <string name="username">Username</string>
+    <string name="logout">Logout</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
