@@ -1,6 +1,7 @@
 package com.example.digitalkhata.api
 import com.example.digitalkhata.model.ApiResponse
 import com.example.digitalkhata.model.UserLoginRequest
+import com.example.digitalkhata.model.UserRegisterRequest
 import com.example.digitalkhata.model.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -13,6 +14,11 @@ interface ApiService {
     @POST("login")
     suspend fun login(
         @Body requestBody: UserLoginRequest
+    ): Response<ApiResponse<String>>
+
+    @POST("register")
+    suspend fun register(
+        @Body requestBody: UserRegisterRequest
     ): Response<ApiResponse<String>>
 
     @GET("user/profile/{userId}")

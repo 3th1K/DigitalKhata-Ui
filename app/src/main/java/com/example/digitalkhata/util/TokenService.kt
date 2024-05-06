@@ -2,9 +2,15 @@ package com.example.digitalkhata.util
 
 import android.content.Context
 import com.auth0.jwt.JWT
+import com.auth0.jwt.interfaces.DecodedJWT
 import java.util.Date
 
 object TokenService {
+
+    fun extractUserIdFromToken(token: String): Int {
+        val jwt: DecodedJWT = JWT.decode(token)
+        return jwt.getClaim("userId").asString().toInt()
+    }
 
     fun isUserLoggedIn(context: Context): Boolean {
         // Check if token is present

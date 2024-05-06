@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
@@ -48,21 +47,21 @@ class MainActivity : AppCompatActivity() {
         if(!TokenService.isUserLoggedIn(this@MainActivity)) {
 
             enableEdgeToEdge()
-            setContentView(R.layout.activity_main)
+            setContentView(R.layout.login_ui)
 
-            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main))
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layout_login))
             { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
             }
             // Initialize EditText fields
-            usernameEditText = findViewById(R.id.username_input)
-            passwordEditText = findViewById(R.id.password_input)
-            loginButton = findViewById(R.id.login_btn)
-            registerButton = findViewById(R.id.register_btn)
+            usernameEditText = findViewById(R.id.input_username)
+            passwordEditText = findViewById(R.id.input_password)
+            loginButton = findViewById(R.id.btn_login)
+            registerButton = findViewById(R.id.btn_register)
             loadingLayout = findViewById(R.id.loading_layout)
-            mainLayout = findViewById(R.id.main)
+            mainLayout = findViewById(R.id.layout_login)
         }
         else
         {
@@ -153,7 +152,7 @@ class MainActivity : AppCompatActivity() {
                     if(token.isNotEmpty())
                     {
                         LocalStorage.saveAuthToken(this@MainActivity, token)
-                        val userId = extractUserIdFromToken(token)
+                        val userId = TokenService.extractUserIdFromToken(token)
                         fetchUserDetails(apiService, token, userId)
                     }
                     else
@@ -227,10 +226,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun extractUserIdFromToken(token: String): Int {
-        val jwt: DecodedJWT = JWT.decode(token)
-        return jwt.getClaim("userId").asString().toInt()
-    }
+
 
 
 }

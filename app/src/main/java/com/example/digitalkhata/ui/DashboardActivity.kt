@@ -16,7 +16,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.digitalkhata.R
 import com.example.digitalkhata.util.LocalStorage
-import javax.security.auth.login.LoginException
 
 
 class DashboardActivity : AppCompatActivity() {
@@ -31,20 +30,22 @@ class DashboardActivity : AppCompatActivity() {
         setupUI()
         setupClickListeners()
     }
+
+
     private fun setupUI()
     {
         enableEdgeToEdge()
         setContentView(R.layout.dashboard_ui)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.dashboard_ui))
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layout_dashboard))
         { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        drawerLayout = findViewById(R.id.drawer_layout)
-        profileImage = findViewById(R.id.profile_image)
+        drawerLayout = findViewById(R.id.layout_drawer)
+        profileImage = findViewById(R.id.image_profile)
 
         userNameText = findViewById(R.id.text_username)
         fullNameText = findViewById(R.id.text_fullname)
