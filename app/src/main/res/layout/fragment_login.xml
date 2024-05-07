@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_login"
@@ -6,15 +5,17 @@
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
     android:gravity="center"
-    android:padding="16dp"
-    tools:context=".ui.MainActivity">
+    tools:context=".fragments.LoginFragment">
 
-    <include layout="@layout/loading_layout" />
+    <include
+        layout="@layout/loading_layout"
+        android:id="@+id/loading_layout"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="160dp"

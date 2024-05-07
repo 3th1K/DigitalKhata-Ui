@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
     android:theme="@style/Theme.AppCompat"
-    tools:context=".ui.SearchActivity">
+    tools:context=".fragments.SearchFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/view_materialCard"

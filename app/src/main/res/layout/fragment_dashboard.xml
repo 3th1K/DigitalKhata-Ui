@@ -7,14 +7,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
     android:gravity="center"
-    android:padding="16dp"
-    tools:context=".ui.RegistrationActivity">
+    tools:context=".fragments.DashboardFragment">
 
     <!-- Main Content -->
     <RelativeLayout
         android:id="@+id/layout_dashboard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
         <!-- Search Image -->
         <ImageView

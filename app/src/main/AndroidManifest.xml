@@ -25,19 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- Registration Activity -->
-        <activity android:name=".ui.RegistrationActivity" />
-        <activity android:name=".ui.DashboardActivity" />
-        <!-- In your AndroidManifest.xml -->
-        <activity
-            android:name=".ui.SearchActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
 
     </application>
