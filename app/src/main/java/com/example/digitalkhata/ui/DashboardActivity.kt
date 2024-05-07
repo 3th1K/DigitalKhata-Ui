@@ -15,16 +15,24 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.digitalkhata.R
+import com.example.digitalkhata.api.RetrofitClient
+import com.example.digitalkhata.model.UserResponse
 import com.example.digitalkhata.util.LocalStorage
+import retrofit2.HttpException
 
 
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
+
     private lateinit var profileImage: ImageView
+    private lateinit var searchImage: ImageView
+
     private lateinit var userNameText: TextView
     private lateinit var fullNameText: TextView
     private lateinit var emailText: TextView
+
+    private lateinit var logoutButton: Button
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setupUI()
@@ -45,11 +53,15 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         drawerLayout = findViewById(R.id.layout_drawer)
+
         profileImage = findViewById(R.id.image_profile)
+        searchImage =  findViewById(R.id.image_search)
 
         userNameText = findViewById(R.id.text_username)
         fullNameText = findViewById(R.id.text_fullname)
         emailText = findViewById(R.id.text_email)
+
+        logoutButton = findViewById(R.id.btn_logout)
 
         setupProfile()
 
@@ -61,6 +73,7 @@ class DashboardActivity : AppCompatActivity() {
         toggle.syncState()
     }
 
+
     private fun setupProfile()
     {
         userNameText.text = LocalStorage.getUserName(this@DashboardActivity)
@@ -70,13 +83,17 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun setupClickListeners()
     {
+        // Set up click listener for search image to navigate to search
+        searchImage.setOnClickListener {
+            navigateToSearch()
+        }
+
         // Set up click listener for profile image to open the drawer
         profileImage.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.END) // Open drawer from right
         }
 
         // Set up click listener for logout button
-        val logoutButton = findViewById<Button>(R.id.btn_logout)
         logoutButton.setOnClickListener{
             handleLogout()
         }
@@ -92,9 +109,10 @@ class DashboardActivity : AppCompatActivity() {
         val intent = Intent(this@DashboardActivity, MainActivity::class.java)
         startActivity(intent)
     }
-    private fun Context.showToast(message: String) {
-        runOnUiThread {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        }
+
+    private fun navigateToSearch()
+    {
+        val intent = Intent(this@DashboardActivity, SearchActivity::class.java)
+        startActivity(intent)
     }
 }

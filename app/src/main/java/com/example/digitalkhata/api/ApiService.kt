@@ -26,4 +26,10 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("userId") userId: Int
     ): Response<ApiResponse<UserResponse>>
+
+    @GET("user/search/{searchQuery}")
+    suspend fun searchUser(
+        @Header("Authorization") token: String,
+        @Path("searchQuery") searchQuery: String
+    ): Response<ApiResponse<List<UserResponse>>>
 }

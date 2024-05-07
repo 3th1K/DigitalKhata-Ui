@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="drawer_background_color">#FFFFFF</color>
+    <color name="gray">#4E5157</color>
 </resources>
