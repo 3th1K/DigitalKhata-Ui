@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.digitalkhata.R
 import com.example.digitalkhata.api.RetrofitClient
@@ -47,8 +48,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun onSearchedUserClick(user: UserResponse) {
-        // have to implement logic
-        Toast.makeText(requireContext(), "Clicked ${user.fullname}", Toast.LENGTH_SHORT).show()
+        val action = SearchFragmentDirections.actionSearchFragmentToExpenseFragment(user)
+        findNavController().navigate(action)
     }
 
     private fun setupListeners() {

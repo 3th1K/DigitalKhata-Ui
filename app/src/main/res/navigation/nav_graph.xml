@@ -42,10 +42,27 @@
             android:id="@+id/action_dashboardFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/nav_graph" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_expenseFragment"
+            app:destination="@id/expenseFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.digitalkhata.fragments.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_expenseFragment"
+            app:destination="@id/expenseFragment"
+            app:popUpTo="@id/dashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/expenseFragment"
+        android:name="com.example.digitalkhata.fragments.ExpenseFragment"
+        android:label="fragment_expense"
+        tools:layout="@layout/fragment_expense" >
+        <argument
+            android:name="otherUser"
+            app:argType="com.example.digitalkhata.model.UserResponse" />
+    </fragment>
 </navigation>
