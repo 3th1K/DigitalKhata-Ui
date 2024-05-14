@@ -53,12 +53,9 @@ class ExpenseAdapter(private var userId: Int, private var expenseList: List<Expe
 
         holder.description.text = expenseList[position].description
 
-        val date = expenseList[position].date
-        val localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-        val formatter = DateTimeFormatter.ofPattern("dd MMM hh.mm a", Locale.ENGLISH)
+        val date = expenseList[position].localDateTime
 
-        holder.date.text = formatter.format(localDateTime)
-
+        holder.date.text = date;
 
         holder.bind(expenseList[position])
     }
