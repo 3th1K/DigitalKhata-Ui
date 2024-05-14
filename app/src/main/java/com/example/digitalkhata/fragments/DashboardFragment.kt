@@ -129,6 +129,11 @@ class DashboardFragment : Fragment() {
             LocalStorage.clearAllData(requireContext())
             findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
         }
+
+        binding.swiperefresh.setOnRefreshListener{
+            updateUserExpenses()
+            binding.swiperefresh.isRefreshing = false;
+        }
     }
     private fun showToast(message: String) {
         activity?.runOnUiThread {

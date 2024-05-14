@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <base-config>
+    <domain-config>
+        <domain includeSubdomains="true">digital-khata-identity.somee.com</domain>
         <trust-anchors>
-            <certificates src="@raw/myca_1"/>
+            <certificates src="@raw/my_ca"/>
         </trust-anchors>
-    </base-config>
+    </domain-config>
 </network-security-config>

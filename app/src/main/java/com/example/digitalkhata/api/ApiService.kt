@@ -15,42 +15,42 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-    @POST("login")
+    @POST("Identity/login")
     suspend fun login(
         @Body requestBody: UserLoginRequest
     ): Response<ApiResponse<String>>
 
-    @POST("register")
+    @POST("Identity/register")
     suspend fun register(
         @Body requestBody: UserRegisterRequest
     ): Response<ApiResponse<String>>
 
-    @GET("user/profile/{userId}")
+    @GET("User/profile/{userId}")
     suspend fun getUserDetails(
         @Header("Authorization") token: String,
         @Path("userId") userId: Int
     ): Response<ApiResponse<UserResponse>>
 
-    @GET("user/search/{searchQuery}")
+    @GET("User/search/{searchQuery}")
     suspend fun searchUser(
         @Header("Authorization") token: String,
         @Path("searchQuery") searchQuery: String
     ): Response<ApiResponse<List<UserResponse>>>
 
-    @GET("expense/users-expenses")
+    @GET("Expense/expense-users/{userId}")
     suspend fun getUserExpenses(
         @Header("Authorization") token: String,
-        @Query("userId") userId: Int
+        @Path("userId") userId: Int
     ): Response<ApiResponse<List<UserResponse>>>
 
-    @GET("expense/transaction-history")
+    @GET("Expense/{userId}/transaction-history/{otherUserId}")
     suspend fun getTransactionHistory(
         @Header("Authorization") token: String,
-        @Query("userId") userId: Int,
-        @Query("otherUserId") otherUserId: Int
+        @Path("userId") userId: Int,
+        @Path("otherUserId") otherUserId: Int
     ): Response<ApiResponse<UserTransactionHistory>>
 
-    @POST("expense/add")
+    @POST("Expense/add")
     suspend fun addExpense(
         @Header("Authorization") token: String,
         @Body requestBody: ExpenseAddRequest

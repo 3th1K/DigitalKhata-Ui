@@ -42,6 +42,11 @@ class ExpenseFragment : Fragment(), AddExpenseFragment.OnExpenseAddedListener {
         binding.btnAddExpense.setOnClickListener{
             showAddExpenseDialog()
         }
+        binding.swiperefresh.setOnRefreshListener{
+            updateTransactionHistory()
+            binding.swiperefresh.isRefreshing = false;
+        }
+
 
         binding.textUsername.text = args.otherUser.fullname
 
@@ -87,12 +92,23 @@ class ExpenseFragment : Fragment(), AddExpenseFragment.OnExpenseAddedListener {
     {
         activity?.runOnUiThread{
             val totalTransactionAmount = transactionHistory.transactions.sumOf { it.amount  }
-            binding.textTotalTransactionAmount.text = totalTransactionAmount.toString()
+            binding.textTotalTransactionAmount.text = "Total transactions ₹$totalTransactionAmount"
 
             val userId = LocalStorage.getUserId(requireContext())
             if(!userId.isNullOrEmpty())
             {
-                //val x = transactionHistory.netAmountOwedOrReceived[userId]
+                val x: Double? = transactionHistory.netAmountOwedOrReceived[userId.toInt()]
+                if(x != null)
+                {
+                    if(x<0)
+                    {
+                        binding.textAmountToBePaidReceived.text = "Amount yet to be received: ₹${-x}"
+                    }
+                    else
+                    {
+                        binding.textAmountToBePaidReceived.text = "Amount to be Paid: ₹$x"
+                    }
+                }
 
             }
             else
