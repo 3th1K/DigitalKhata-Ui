@@ -8,12 +8,16 @@
     android:background="@drawable/login_background"
     android:gravity="center"
     tools:context=".fragments.DashboardFragment">
+    <include
+        layout="@layout/loading_layout"
+        android:id="@+id/loading_layout"/>
 
     <!-- Main Content -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:id="@+id/layout_dashboard"
             android:layout_width="match_parent"

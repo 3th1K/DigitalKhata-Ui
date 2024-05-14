@@ -54,6 +54,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun updateUserExpenses() {
+        showLoading()
         CoroutineScope(Dispatchers.IO).launch{
             val userId = LocalStorage.getUserId(requireContext())
             if(!userId.isNullOrEmpty())
@@ -61,6 +62,7 @@ class DashboardFragment : Fragment() {
                 val users = fetchUserExpenses(userId.toInt())
                 activity?.runOnUiThread{
                     adapter.setFilteredList(users)
+                    hideLoading()
                 }
             }
         }
@@ -133,6 +135,30 @@ class DashboardFragment : Fragment() {
         binding.swiperefresh.setOnRefreshListener{
             updateUserExpenses()
             binding.swiperefresh.isRefreshing = false;
+        }
+    }
+
+    private fun showLoading() {
+        activity?.runOnUiThread {
+            // Disable user interaction for all views in the main layout
+            binding.imageSearch.isEnabled = false
+            binding.myImage.isEnabled = false
+            // Optionally, apply a semi-transparent overlay to visually indicate that the views are disabled
+            binding.layoutDashboard.alpha = 0.5f
+            // Show the loading layout
+            binding.loadingLayout.root.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideLoading() {
+        activity?.runOnUiThread {
+            // Enable user interaction for all views in the main layout
+            binding.imageSearch.isEnabled = true
+            binding.myImage.isEnabled = true
+            // Restore the alpha of the main layout
+            binding.layoutDashboard.alpha = 1.0f
+            // Hide the loading layout
+            binding.loadingLayout.root.visibility = View.GONE
         }
     }
     private fun showToast(message: String) {
