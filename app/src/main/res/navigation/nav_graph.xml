@@ -55,6 +55,10 @@
             android:id="@+id/action_searchFragment_to_expenseFragment"
             app:destination="@id/expenseFragment"
             app:popUpTo="@id/dashboardFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/expenseFragment"
@@ -64,5 +68,9 @@
         <argument
             android:name="otherUser"
             app:argType="com.example.digitalkhata.model.UserResponse" />
+        <action
+            android:id="@+id/action_expenseFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
 </navigation>

@@ -17,6 +17,7 @@ import com.example.digitalkhata.databinding.FragmentSearchBinding
 import com.example.digitalkhata.model.UserAdapter
 import com.example.digitalkhata.model.UserResponse
 import com.example.digitalkhata.util.LocalStorage
+import com.example.digitalkhata.util.TokenService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,6 +46,21 @@ class SearchFragment : Fragment() {
         setupListeners()
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkLoggedIn()
+    }
+    private fun checkLoggedIn()
+    {
+        if(!TokenService.isUserLoggedIn(requireContext())) {
+            showToast("User session ended, please login again")
+            LocalStorage.clearAllData(requireContext())
+            activity?.runOnUiThread {
+                findNavController().navigate(R.id.action_searchFragment_to_loginFragment)
+            }
+        }
     }
 
     private fun onSearchedUserClick(user: UserResponse) {
@@ -89,9 +105,9 @@ class SearchFragment : Fragment() {
                 val users = response.body()?.data
                 if(users != null)
                     return users.filter { it.userId != LocalStorage.getUserId(requireContext())?.toInt() }
-            } else {
-                // Handle unsuccessful response here
-                //showToast("Failed to search users: ${response.message()}")
+            } else if(response.code()==401)
+            {
+                checkLoggedIn()
             }
         } catch (e: HttpException) {
             // Handle HTTP exception

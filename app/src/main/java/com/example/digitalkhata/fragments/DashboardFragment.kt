@@ -16,6 +16,7 @@ import com.example.digitalkhata.databinding.FragmentDashboardBinding
 import com.example.digitalkhata.model.UserAdapter
 import com.example.digitalkhata.model.UserResponse
 import com.example.digitalkhata.util.LocalStorage
+import com.example.digitalkhata.util.TokenService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +27,6 @@ class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashboardBinding
 
     private lateinit var adapter: UserAdapter
-    private var c: Int = 1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +39,21 @@ class DashboardFragment : Fragment() {
         setupClickListeners()
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkLoggedIn()
+    }
+    private fun checkLoggedIn()
+    {
+        if(!TokenService.isUserLoggedIn(requireContext())) {
+            showToast("User session ended, please login again")
+            LocalStorage.clearAllData(requireContext())
+            activity?.runOnUiThread {
+                findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
+            }
+        }
     }
 
     private fun initializeUserExpenses()
@@ -77,6 +92,10 @@ class DashboardFragment : Fragment() {
                 val users = response.body()?.data
                 if(users != null)
                     return users
+            }
+            else if(response.code()==401)
+            {
+                checkLoggedIn()
             }
         } catch (e: HttpException) {
             // Handle HTTP exception

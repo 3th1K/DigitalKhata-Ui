@@ -35,9 +35,10 @@ object TokenService {
     private fun isTokenValid(token: String): Boolean {
         try {
             val decodedToken = JWT.decode(token)
-            val expiryDateSeconds = decodedToken.expiresAt?.time ?: 0
-            val currentDateTimeSeconds = Date().time / 1000 // Convert milliseconds to seconds
-            return (expiryDateSeconds > currentDateTimeSeconds)
+            //val expiryDateSeconds = decodedToken.expiresAt?.time ?: 0
+            //val currentDateTimeSeconds = Date().time / 1000 // Convert milliseconds to seconds
+            //return (expiryDateSeconds > currentDateTimeSeconds)
+            return !decodedToken.expiresAt.before(Date())
         } catch (e: Exception) {
             return false
         }

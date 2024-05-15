@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="drawer_background_color">#FFFFFF</color>
     <color name="gray">#4E5157</color>
+    <color name="red">#F0302D</color>
 </resources>

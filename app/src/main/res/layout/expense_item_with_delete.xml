@@ -1,0 +1,94 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <!-- MaterialCardView with ConstraintLayout -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:cardCornerRadius="8dp"
+        app:cardUseCompatPadding="false"
+        app:cardElevation="12dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginVertical="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/expense_constLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_purple"
+            android:padding="10dp"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/text_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1-1-2020"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/holo_blue_light" />
+
+                <TextView
+                    android:id="@+id/text_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Biriyani party"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:textStyle="italic"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/holo_blue_light" />
+
+                <TextView
+                    android:id="@+id/text_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="+20"
+                    android:textColor="@color/black"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    android:fontFamily="sans-serif-condensed-medium"/>
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Delete Button -->
+    <ImageButton
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="delete"
+        android:padding="10dp"
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>

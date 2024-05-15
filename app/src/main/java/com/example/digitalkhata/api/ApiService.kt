@@ -8,6 +8,7 @@ import com.example.digitalkhata.model.UserResponse
 import com.example.digitalkhata.model.UserTransactionHistory
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -54,5 +55,11 @@ interface ApiService {
     suspend fun addExpense(
         @Header("Authorization") token: String,
         @Body requestBody: ExpenseAddRequest
+    ): Response<ApiResponse<ExpenseResponse>>
+
+    @DELETE("Expense/delete/{id}")
+    suspend fun deleteExpense(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
     ): Response<ApiResponse<ExpenseResponse>>
 }

@@ -1,7 +1,34 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Login_page" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.DK" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Colors -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorSecondary">#610202</item>
+        <item name="colorAccent">#FF4081</item> <!-- Accent color -->
+
+        <!-- Fonts -->
+        <item name="android:fontFamily">serif-monospace</item>
+
+        <!-- Text Appearance -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/black</item>
+
+        <!-- Button Styles
+        <item name="buttonStyle">@style/Widget.AppCompat.Button</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.AppCompat.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.AppCompat.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.AppCompat.Button</item> -->
+
+        <!-- Edit Text Styles -->
+        <item name="editTextStyle">@style/Widget.AppCompat.EditText</item>
+
+        <!-- Spinner Styles
+        <item name="spinnerStyle">@style/Widget.AppCompat.Spinner</item> -->
+
+        <!-- CheckBox Styles -->
+        <item name="checkboxStyle">@style/Widget.AppCompat.CompoundButton.CheckBox</item>
+
+        <!-- RadioButton Styles -->
+        <item name="radioButtonStyle">@style/Widget.AppCompat.CompoundButton.RadioButton</item>
     </style>
 </resources>

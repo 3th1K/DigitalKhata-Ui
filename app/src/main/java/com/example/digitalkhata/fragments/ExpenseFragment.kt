@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.digitalkhata.R
@@ -20,6 +21,7 @@ import com.example.digitalkhata.model.UserAdapter
 import com.example.digitalkhata.model.UserResponse
 import com.example.digitalkhata.model.UserTransactionHistory
 import com.example.digitalkhata.util.LocalStorage
+import com.example.digitalkhata.util.TokenService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,10 +41,10 @@ class ExpenseFragment : Fragment(), AddExpenseFragment.OnExpenseAddedListener {
         // Inflate the layout for this fragment
         binding = FragmentExpenseBinding.inflate(inflater, container, false)
 
-        binding.btnAddExpense.setOnClickListener{
+        binding.btnAddExpense.setOnClickListener {
             showAddExpenseDialog()
         }
-        binding.swiperefresh.setOnRefreshListener{
+        binding.swiperefresh.setOnRefreshListener {
             updateTransactionHistory()
             binding.swiperefresh.isRefreshing = false;
         }
@@ -54,8 +56,22 @@ class ExpenseFragment : Fragment(), AddExpenseFragment.OnExpenseAddedListener {
         binding.viewRecycler.layoutManager = LinearLayoutManager(requireContext())
 
         val userId = LocalStorage.getUserId(requireContext())
-        if(!userId.isNullOrEmpty())
-            adapter = ExpenseAdapter(userId.toInt(),emptyList()){}
+        if (!userId.isNullOrEmpty()) {
+            adapter = ExpenseAdapter(
+                userId.toInt(),
+                emptyList(),
+                onItemClick = {
+                    // Handle item click here
+                },
+                onDeleteClick = { expense ->
+                    // Handle delete button click here
+                    CoroutineScope(Dispatchers.IO).launch {
+                        deleteExpense(expense)
+                        updateTransactionHistory()
+                    }
+                }
+            )
+        }
         binding.viewRecycler.adapter = adapter
 
         updateTransactionHistory()
@@ -63,68 +79,100 @@ class ExpenseFragment : Fragment(), AddExpenseFragment.OnExpenseAddedListener {
 
         return binding.root
     }
+    override fun onStart() {
+        super.onStart()
+        checkLoggedIn()
+    }
+    private fun checkLoggedIn()
+    {
+        if(!TokenService.isUserLoggedIn(requireContext())) {
+            showToast("User session ended, please login again")
+            LocalStorage.clearAllData(requireContext())
+            activity?.runOnUiThread {
+                findNavController().navigate(R.id.action_expenseFragment_to_loginFragment)
+            }
+        }
+    }
+
+    private suspend fun deleteExpense(expense: ExpenseResponse) {
+        try {
+            val token = LocalStorage.getAuthToken(requireContext())
+            val response =
+                RetrofitClient.apiService.deleteExpense("Bearer $token", expense.expenseId)
+            if (response.isSuccessful) {
+                showToast("Expense deleted")
+            }
+            else if(response.code()==401)
+            {
+                checkLoggedIn()
+            }
+            else{
+                showToast("Expense was not deleted, please try again later")
+            }
+        } catch (e: HttpException) {
+            // Handle HTTP exception
+            showToast("HTTP Exception: ${e.message()}")
+        } catch (e: Exception) {
+            // Handle other exceptions
+            showToast("Exception: ${e.message}")
+        }
+    }
 
     private fun updateTransactionHistory() {
-        CoroutineScope(Dispatchers.IO).launch{
+        CoroutineScope(Dispatchers.IO).launch {
             val userId = LocalStorage.getUserId(requireContext())
-            if(!userId.isNullOrEmpty())
-            {
-                val transactionHistory = fetchTransactionHistory(userId.toInt(), args.otherUser.userId)
-                activity?.runOnUiThread{
-                    if(transactionHistory!=null){
+            if (!userId.isNullOrEmpty()) {
+                val transactionHistory =
+                    fetchTransactionHistory(userId.toInt(), args.otherUser.userId)
+                activity?.runOnUiThread {
+                    if (transactionHistory != null) {
                         val transactions = transactionHistory.transactions
                         updateTotal(transactionHistory)
                         adapter.setExpenseList(transactions.reversed())
-                    }
-                    else {
+                    } else {
                         adapter.setExpenseList(emptyList())
                     }
                 }
 
-            }
-            else
-            {
+            } else {
                 showToast("Error : cannot get local user")
             }
         }
     }
-    private fun updateTotal(transactionHistory: UserTransactionHistory)
-    {
-        activity?.runOnUiThread{
-            val totalTransactionAmount = transactionHistory.transactions.sumOf { it.amount  }
+
+    private fun updateTotal(transactionHistory: UserTransactionHistory) {
+        activity?.runOnUiThread {
+            val totalTransactionAmount = transactionHistory.transactions.sumOf { it.amount }
             binding.textTotalTransactionAmount.text = "Total transactions ₹$totalTransactionAmount"
 
             val userId = LocalStorage.getUserId(requireContext())
-            if(!userId.isNullOrEmpty())
-            {
+            if (!userId.isNullOrEmpty()) {
                 val x: Double? = transactionHistory.netAmountOwedOrReceived[userId.toInt()]
-                if(x != null)
-                {
-                    if(x<0)
-                    {
-                        binding.textAmountToBePaidReceived.text = "Amount yet to be received: ₹${-x}"
-                    }
-                    else
-                    {
+                if (x != null) {
+                    if (x < 0) {
+                        binding.textAmountToBePaidReceived.text =
+                            "Amount yet to be received: ₹${-x}"
+                    } else {
                         binding.textAmountToBePaidReceived.text = "Amount to be Paid: ₹$x"
                     }
                 }
 
-            }
-            else
-            {
+            } else {
                 showToast("Error : cannot get local user")
             }
         }
     }
 
-    private suspend fun addExpense(request: ExpenseAddRequest) : ExpenseResponse?{
+    private suspend fun addExpense(request: ExpenseAddRequest): ExpenseResponse? {
         try {
             val token = LocalStorage.getAuthToken(requireContext())
             val response = RetrofitClient.apiService.addExpense("Bearer $token", request)
-            if (response.isSuccessful)
-            {
+            if (response.isSuccessful) {
                 return response.body()?.data
+            }
+            else if(response.code()==401)
+            {
+                checkLoggedIn()
             }
         } catch (e: HttpException) {
             // Handle HTTP exception
@@ -136,13 +184,17 @@ class ExpenseFragment : Fragment(), AddExpenseFragment.OnExpenseAddedListener {
         return null
     }
 
-    private suspend fun fetchTransactionHistory(id: Int, otherId: Int) : UserTransactionHistory? {
+    private suspend fun fetchTransactionHistory(id: Int, otherId: Int): UserTransactionHistory? {
         try {
             val token = LocalStorage.getAuthToken(requireContext())
-            val response = RetrofitClient.apiService.getTransactionHistory("Bearer $token", id, otherId)
-            if (response.isSuccessful)
-            {
+            val response =
+                RetrofitClient.apiService.getTransactionHistory("Bearer $token", id, otherId)
+            if (response.isSuccessful) {
                 return response.body()?.data
+            }
+            else if(response.code()==401)
+            {
+                checkLoggedIn()
             }
         } catch (e: HttpException) {
             // Handle HTTP exception
@@ -153,32 +205,29 @@ class ExpenseFragment : Fragment(), AddExpenseFragment.OnExpenseAddedListener {
         }
         return null
     }
+
     private fun showToast(message: String) {
         activity?.runOnUiThread {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
+
     override fun onExpenseAdded(amount: Double, description: String) {
         val userId = LocalStorage.getUserId(requireContext())
-        if(!userId.isNullOrEmpty())
-        {
-            var expenseRequest = ExpenseAddRequest(userId.toInt(), args.otherUser.userId, amount, description)
-            CoroutineScope(Dispatchers.IO).launch{
+        if (!userId.isNullOrEmpty()) {
+            var expenseRequest =
+                ExpenseAddRequest(userId.toInt(), args.otherUser.userId, amount, description)
+            CoroutineScope(Dispatchers.IO).launch {
                 var expense = addExpense(expenseRequest)
-                if(expense != null)
-                {
+                if (expense != null) {
                     updateTransactionHistory()
                     showToast("Expense added successfully")
-                }
-                else
-                {
+                } else {
                     showToast("Expense was not added, try again later")
                 }
             }
 
-        }
-        else
-        {
+        } else {
             showToast("Error : cannot get local user")
         }
     }
@@ -191,7 +240,10 @@ class ExpenseFragment : Fragment(), AddExpenseFragment.OnExpenseAddedListener {
         addExpenseFragment.setOnExpenseAddedListener(this)
 
         // Show the dialog
-        addExpenseFragment.show((activity as AppCompatActivity).supportFragmentManager, "addExpenseFragment")
+        addExpenseFragment.show(
+            (activity as AppCompatActivity).supportFragmentManager,
+            "addExpenseFragment"
+        )
     }
 
 
